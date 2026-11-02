@@ -1,0 +1,102 @@
+# Part C — LoRA configuration [C.8]
+# Returns Policy Assistant. Decided by Chaitanya on 2026-10-30, before
+# any training. If a value is changed after seeing results, that is a
+# new version of this file with the reason recorded — never a silent
+# edit.
+
+base_model: Qwen/Qwen3-8B
+# Base model size choice: the fine-tuned model must be the baseline
+# model trained, or the S2 comparison in the [C.7] plan (fine-tuned vs
+# its own base) is meaningless. 8B fits the job: the baseline showed
+# the gap is behavioral, not capability — of the replies the base model
+# finished, 9/10 decisions were already correct; what failed was
+# discipline (runaway thinking, format, leaking the policy bands).
+# That is exactly what a LoRA adapter teaches. A smaller model (e.g.
+# 4B) was NOT tested: the concern that it could shift the bottleneck
+# from behavior to capability is recorded as a risk judgment, not a
+# measured result — multi-step conditional reasoning with exceptions
+# is the ability that degrades first as models shrink, and the ladder
+# is exactly that. With 8B training costing cents, there was no
+# saving worth taking that risk for; comparability is the binding
+# argument. (Wording settled 2026-11-02 in a one-by-one re-derivation
+# of this config.)
+
+lora_rank: 16
+# Rank is the adapter's capacity. The teaching job is narrow (one
+# decision ladder, one output format, one house style) and the dataset
+# is small (68 train examples). Rank 8 risks underfitting the ladder's
+# conditional structure (Step 0, the shop-error guarantee, the three
+# exchange-only triggers); rank 32 risks memorizing the 68 drafts
+# word-for-word and turning brittle on unseen cases. 16 is the middle
+# with the best risk profile for this data size — at all-linear on
+# Qwen3-8B it is ~44M trainable parameters, 0.55% of the model.
+# (Re-derived and confirmed by Chaitanya on 2026-11-02.)
+
+lora_alpha: 32
+# Alpha scales the adapter's effect (scale = alpha / rank). Set by
+# the standard convention alpha = 2 x rank, which fixes the scale so
+# training behavior is tuned with the learning rate alone — one
+# moving part instead of two interacting ones.
+# (Re-derived and confirmed by Chaitanya on 2026-11-02.)
+
+target_modules: all-linear
+# Adapters on all linear layers — attention and feed-forward — which
+# is how Tinker applies LoRA at a given rank. Response behavior and
+# style live substantially in the feed-forward blocks, so an
+# attention-only adapter would under-reach for a behavior task.
+# (Re-derived and confirmed by Chaitanya on 2026-11-02: attention
+# patches ~15M of the ~44M total, FFN patches ~28M — both halves of
+# the baseline's failure list, looking and responding, get a patch.)
+
+learning_rate: 0.0001
+# Middle of the standard LoRA band for a model this size
+# (5e-5 to 2e-4). 2e-4 would learn faster but risks instability and
+# damaging general language quality; 5e-5 is gentler but may not land
+# the format discipline within 3 epochs. The per-epoch loss curves
+# are the evidence this choice was right, and they are logged [C.9].
+# (Re-derived and confirmed by Chaitanya on 2026-11-02: with scale
+# fixed at 2, the felt strength is 1e-4 x 2 = 2e-4.)
+
+epochs: 3
+# Three passes over the 68 train examples — enough repetition for the
+# ladder and format to become the model's default behavior, few
+# enough to limit memorization. Validation loss is logged every
+# epoch; if it turns upward, that overfitting signal is reported in
+# the scorecard rather than silently retrained away.
+# (Re-derived and confirmed by Chaitanya on 2026-11-02: a checkpoint
+# is saved after each epoch, so if the epoch-3 curve turns up, the
+# epoch-2 model can still be used and the turn reported honestly.)
+
+batch_size: 8
+# 68 examples / batch 8 = ~9 optimizer steps per epoch, ~27 total.
+# Batch 16 would halve the update count to ~13 — thin for behavior
+# change at this dataset size.
+# (Re-derived and confirmed by Chaitanya on 2026-11-02: batch size is
+# the last piece of the total learning dose — steps x learning rate x
+# scale — because it sets the step count.)
+
+train_file: train.jsonl
+validation_file: validation.jsonl
+# Training uses ONLY train.jsonl (68). validation.jsonl (16) is for
+# loss monitoring and is never trained on. test.jsonl is never touched
+# during training or tuning — it exists only for scoring.
+
+cost_estimate_usd: 0.03
+cost_cap_usd: 1.00
+# Estimate: ~11,700 training tokens per epoch x 3 epochs at Tinker's
+# published Qwen3-8B train rate ($0.44 per 1M tokens) = roughly
+# $0.02-0.03, plus checkpoint storage (negligible at $0.10/GB/month).
+# The $1.00 cap is ~30x the estimate: it cannot trip accidentally,
+# but it formally bounds the run. Spend comes out of the prepaid
+# Tinker credit balance.
+# (Re-derived and confirmed by Chaitanya on 2026-11-02.)
+
+dry_run: required-before-full-run
+# [C.8] A dry run comes first: a few training steps on a small slice
+# of the train file to verify data loading, loss computation, and
+# checkpoint saving before the full run spends anything.
+# (Plan agreed by Chaitanya on 2026-11-02: the prepared 8-example
+# slice, this same config, 2-3 steps; it passes only if all five
+# checks work — data loads, training client is created, loss comes
+# out and moves sanely, a checkpoint saves, and the saved model can
+# be sampled and answers in normal English.)
