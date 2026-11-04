@@ -17,17 +17,17 @@ approve or deny costs the shop money or trust. The full argument is in
 
 ## Status
 
-| Step | State |
-|---|---|
-| [C.3] Behavior definition | Done — `behavior.md` |
-| Policy (v5) | Done — `policy-reference.md` |
-| [C.5] Review SOP | Done — `review-sop.md` |
-| [C.4]/[C.6] Dataset: 100 reviewed examples | Done — `dataset.jsonl`, splits below |
-| [C.7] Baselines | Base Qwen3-8B scored (see Results); frontier run in progress |
-| [C.8] LoRA config | Done — `lora_config.yaml` |
-| [C.9] Training on Tinker | Dry run next |
-| [C.10] Scorecard | After training |
-| [C.11] This repo | In progress |
+| Step                                       | State                                                                                    |
+| ------------------------------------------ | ---------------------------------------------------------------------------------------- |
+| [C.3] Behavior definition                  | Done — `behavior.md`                                                                     |
+| Policy (v5)                                | Done — `policy-reference.md`                                                             |
+| [C.5] Review SOP                           | Done — `review-sop.md`                                                                   |
+| [C.4]/[C.6] Dataset: 100 reviewed examples | Done — `dataset.jsonl`, splits below                                                     |
+| [C.7] Baselines                            | Base Qwen3-8B scored (see Results); frontier run 9/16, completing under free-tier limits |
+| [C.8] LoRA config                          | Done — `lora_config.yaml`                                                                |
+| [C.9] Training on Tinker                   | Done — 3 epochs, validation loss 0.72 → 0.30 → 0.14 (`training_log.jsonl`)               |
+| [C.10] Scorecard                           | Done except the frontier column — `scorecard.md`                                         |
+| [C.11] This repo                           | In progress — diagrams in `diagrams.md`; final checks pending the frontier results       |
 
 ## Files
 
@@ -52,6 +52,8 @@ approve or deny costs the shop money or trust. The full argument is in
   worksheet generator.
 - `run_baseline.py` — samples the base Qwen3-8B on the test prompts
   via Tinker.
+- `base_qwen_results.jsonl` — the base model's 16 raw replies from
+  that run (the scored copy of record).
 - `run_frontier_gemini.py` — the frontier baseline (Gemini via Google
   AI Studio's free tier, same prompt and scoring).
 - `lora_config.yaml` — [C.8]: the LoRA config, every value justified.
@@ -59,6 +61,16 @@ approve or deny costs the shop money or trust. The full argument is in
 - `train_sft.jsonl` / `train_sft_dryrun.jsonl` / `validation_sft.jsonl`
   — the training data (prompt + gold Decision/Draft per example).
 - `train.py` — [C.9]: the training script (`--dry-run` first).
+- `training_log.jsonl` — [C.9]: train and validation loss, one line
+  per epoch.
+- `run_finetuned.py` — samples the fine-tuned model (epoch-3 sampler
+  weights) on the same 16 test prompts.
+- `finetuned_results.jsonl` — the fine-tuned model's 16 raw replies.
+- `scorecard.md` — [C.10]: the three-model scorecard — decision and
+  draft scores, per-type detail, criteria verdicts, failure analysis,
+  and what data to change next.
+- `diagrams.md` — [C.11]: two Mermaid diagrams — one example through
+  every file, and the training script step by step.
 
 ## How to run
 
@@ -73,9 +85,22 @@ python3 train.py              # full training: 68 examples, 3 epochs [C.9]
 
 ## Results
 
-Base model (Qwen3-8B, best prompt, test set of 16): **9/16 decisions**
-exact match; draft rubric mean **2.25/5**; 3 drafts leaked internal
-policy rules. Per-decision detail in `baseline-scores.md`.
+All models: same 16 test prompts, same shared prompt, decisions by
+exact match, drafts on the fixed 5-point rubric. Full detail, failure
+analysis and criteria verdicts in `scorecard.md`.
 
-Frontier baseline and fine-tuned results: to be added in the [C.10]
-scorecard.
+- **Base model** (Qwen3-8B, best prompt): **9/16 decisions**; draft
+  rubric mean **2.25/5**; 3 drafts leaked internal policy rules. Six
+  of its 16 replies never finished (runaway thinking) — of the 10 that
+  finished, 9 decisions were correct.
+- **Fine-tuned model** (LoRA on Qwen3-8B, 68 training examples, 3
+  epochs): **12/16 decisions** (approve-refund 4/4, approve-exchange
+  4/4, deny 2/4, escalate 2/4); draft rubric mean **3.75/5**; 1 leak.
+  All 16 replies in the exact format. The four wrong decisions all sit
+  on policy boundary lines (the £150 escalate line; the strict band's
+  £50/box and day-30 edges) — see the failure analysis and the
+  data-change plan in `scorecard.md`.
+- **Frontier model** (Gemini, same prompt): run in progress under
+  free-tier rate limits — 9 of 16 answers saved so far, all 9
+  decisions correct. Final column lands in `scorecard.md` when the
+  run completes.
