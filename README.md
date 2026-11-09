@@ -17,17 +17,17 @@ approve or deny costs the shop money or trust. The full argument is in
 
 ## Status
 
-| Step                                       | State                                                                                    |
-| ------------------------------------------ | ---------------------------------------------------------------------------------------- |
-| [C.3] Behavior definition                  | Done — `behavior.md`                                                                     |
-| Policy (v5)                                | Done — `policy-reference.md`                                                             |
-| [C.5] Review SOP                           | Done — `review-sop.md`                                                                   |
-| [C.4]/[C.6] Dataset: 100 reviewed examples | Done — `dataset.jsonl`, splits below                                                     |
-| [C.7] Baselines                            | Base Qwen3-8B scored (see Results); frontier run 9/16, completing under free-tier limits |
-| [C.8] LoRA config                          | Done — `lora_config.yaml`                                                                |
-| [C.9] Training on Tinker                   | Done — 3 epochs, validation loss 0.72 → 0.30 → 0.14 (`training_log.jsonl`)               |
-| [C.10] Scorecard                           | Done except the frontier column — `scorecard.md`                                         |
-| [C.11] This repo                           | In progress — diagrams in `diagrams.md`; final checks pending the frontier results       |
+| Step                                       | State                                                                      |
+| ------------------------------------------ | -------------------------------------------------------------------------- |
+| [C.3] Behavior definition                  | Done — `behavior.md`                                                       |
+| Policy (v5)                                | Done — `policy-reference.md`                                               |
+| [C.5] Review SOP                           | Done — `review-sop.md`                                                     |
+| [C.4]/[C.6] Dataset: 100 reviewed examples | Done — `dataset.jsonl`, splits below                                       |
+| [C.7] Baselines                            | Done — base and frontier both scored (see Results)                         |
+| [C.8] LoRA config                          | Done — `lora_config.yaml`                                                  |
+| [C.9] Training on Tinker                   | Done — 3 epochs, validation loss 0.72 → 0.30 → 0.14 (`training_log.jsonl`) |
+| [C.10] Scorecard                           | Done — `scorecard.md`                                                      |
+| [C.11] This repo                           | In progress — diagrams in `diagrams.md`; final checks pending              |
 
 ## Files
 
@@ -54,8 +54,13 @@ approve or deny costs the shop money or trust. The full argument is in
   via Tinker.
 - `base_qwen_results.jsonl` — the base model's 16 raw replies from
   that run (the scored copy of record).
-- `run_frontier_gemini.py` — the frontier baseline (Gemini via Google
-  AI Studio's free tier, same prompt and scoring).
+- `run_frontier_gemini.py` — the frontier runner as first built for
+  gemini-3.8-flash (abandoned at 9/16 — free-tier unavailability,
+  recorded in `baseline-scores.md`).
+- `run_frontier_gemini_35flashlite.py` — the frontier runner as run:
+  gemini-3.5-flash-lite, clean full-16 run, new results file.
+- `frontier_gemini_35flashlite_results.jsonl` — the frontier model's
+  16 raw replies (the baseline of record).
 - `lora_config.yaml` — [C.8]: the LoRA config, every value justified.
 - `prepare_training_data.py` — builds the SFT files from the splits.
 - `train_sft.jsonl` / `train_sft_dryrun.jsonl` / `validation_sft.jsonl`
@@ -100,7 +105,12 @@ analysis and criteria verdicts in `scorecard.md`.
   on policy boundary lines (the £150 escalate line; the strict band's
   £50/box and day-30 edges) — see the failure analysis and the
   data-change plan in `scorecard.md`.
-- **Frontier model** (Gemini, same prompt): run in progress under
-  free-tier rate limits — 9 of 16 answers saved so far, all 9
-  decisions correct. Final column lands in `scorecard.md` when the
-  run completes.
+- **Frontier model** (Gemini 3.5 Flash-Lite, same prompt):
+  **15/16 decisions** (approve-refund 4/4, approve-exchange 3/4,
+  deny 4/4, escalate 4/4). The original frontier choice,
+  gemini-3.8-flash, was abandoned at 9/16 after its free tier
+  (20 requests/day) proved unavailable across three days; the swap
+  and its reason are recorded in `scorecard.md` and
+  `baseline-scores.md`. Draft rubric mean **4.63/5**; 2 drafts leaked
+  internal rules (both by explaining the mechanism — the £50 band /
+  60-day window, and the £150 threshold).
