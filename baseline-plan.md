@@ -1,4 +1,4 @@
-# Part C — Baseline plan and success criteria [C.7]
+# Baseline plan and success criteria [C.7]
 
 Status: APPROVED — criteria LOCKED by Chaitanya on 2026-10-30, before any
 model has been scored. The success criteria in §2 are not changed after

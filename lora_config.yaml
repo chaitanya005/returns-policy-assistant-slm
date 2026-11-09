@@ -1,4 +1,4 @@
-# Part C — LoRA configuration [C.8]
+# LoRA configuration [C.8]
 # Returns Policy Assistant. Decided by Chaitanya on 2026-10-30, before
 # any training. If a value is changed after seeing results, that is a
 # new version of this file with the reason recorded — never a silent

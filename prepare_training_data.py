@@ -1,4 +1,4 @@
-"""Prepare Part C SFT training data [C.9 prep] from the locked splits.
+"""Prepare SFT training data [C.9 prep] from the locked splits.
 
 Reads files/train.jsonl ONLY (never test.jsonl, never validation.jsonl
 for training). For each train example it emits one line:
@@ -13,7 +13,7 @@ Also writes a dry-run slice (the first 8 train lines) for the [C.8]
 dry run: a few steps on a small slice to verify data loading, loss
 computation and checkpoint saving before the full run.
 
-Run from the Part C goal folder:
+Run from the goal folder:
   python3 hidden_files/prepare_training_data.py
 
 Outputs (hidden_files, not files/ — these are derived, not source data):

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate Part C dataset.jsonl against the locked v5 policy + SOP draft rules.
+"""Validate dataset.jsonl against the locked v5 policy + SOP draft rules.
 
 Checks:
 - JSON validity, exact field sets, types

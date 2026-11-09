@@ -1,4 +1,4 @@
-# Part C — Review SOP: Returns Policy Assistant
+# Review SOP: Returns Policy Assistant
 
 **Status:** v1 — written by Cooper at Chaitanya's request on 2026-10-29 from
 the locked policy (v5) and the approved [C.3] text, and **approved by
@@ -79,6 +79,7 @@ Falling out of a step never sends a case straight to deny — it drops to the
 next step. Deny is only the last step.
 
 ### Step 0 — premium colour/size fast lane → `approve-exchange`
+
 All four must hold: premium product · reason is colour/size · within 3 days
 of delivery · all conditions strictly pass.
 **Exception (v5):** a faulty claim blocks Step 0 — if the message claims a
@@ -86,7 +87,9 @@ fault, skip this step and go to Step 1 (faults are verified, never
 fast-laned).
 
 ### Shop-error rule — checked alongside Steps 0–2
+
 The shop sent the wrong size/colour:
+
 - **Within 7 days and all conditions pass → `approve-exchange`** for the
   correct size/colour actually ordered. This guarantee is checked before
   the £150+ escalate trigger: a £150+ shop-error case at days 4–7 is still
@@ -99,8 +102,10 @@ The shop sent the wrong size/colour:
   like any other case.
 
 ### Step 1 — escalate → `escalate-to-human`
+
 Any one of these triggers escalates. This list is closed — escalate is
 never a label for "unsure" or "unusual":
+
 - Order value **£150 or more** (unless the shop-error guarantee above or
   Step 0 already caught the case)
 - **Faulty claim** — escalate to verify fault vs customer damage
@@ -115,8 +120,10 @@ escalation. Escalate means a human reviews and decides; the human may still
 approve the refund or exchange afterwards.
 
 ### Step 2 — exchange-only → `approve-exchange`
+
 The case is otherwise eligible (it would pass Step 3), but the customer
 asked for a refund and one of these applies:
+
 - `customer_history: flagged`
 - `product_flag: rare-material`
 - The case is a **shop-error** case past its 7-day guarantee (v5)
@@ -125,30 +132,36 @@ Label `approve-exchange`. The draft offers the exchange instead of the
 refund (§5).
 
 ### Step 3 — approve as requested
+
 Eligible, and none of the steps above matched → approve what the customer
 asked for (`approve-refund` or `approve-exchange`):
+
 - **Flexible band — £50 or less:** up to 60 days; the original box is **not**
   required; all other conditions must pass.
 - **Strict band — above £50 to £149.99:** up to 30 days; **all six**
   conditions must pass, including tag and box.
-Boundaries are exact: £50.00 is flexible; £150.00 is Step 1 (subject to
-Step 0 and the shop-error guarantee).
+  Boundaries are exact: £50.00 is flexible; £150.00 is Step 1 (subject to
+  Step 0 and the shop-error guarantee).
 
 ### Step 4 — deny → `deny-out-of-policy`
+
 Reached only when nothing above matched **and** the case is outside its
 band's window or a condition it needs has failed.
 
 ## 5. How to check the draft reply
 
 ### 5.1 Public vs internal — the rule a draft must never break
+
 Drafts may only use **public** language — the terms a customer could be
 shown at purchase:
+
 - the return period ("within our 30-day return period")
 - items returned unused / in their **original condition**, with tags
 - "rare-material items are exchange-only" (a published term of this shop)
 - a team review and a callback within 1 working day
 
 Drafts must **never** reveal internal rules:
+
 - flagged history, or any hint of suspicion about the customer
 - the £150 escalation threshold, or that a case is "high-value"
 - the price bands, the ladder, or the flexible 60-day / £50-or-less
@@ -161,6 +174,7 @@ a team member will review it and call within 1 working day. The internal
 reason belongs in the review record, not the customer's copy.
 
 ### 5.2 Process facts every draft must respect
+
 - Returns are collected by **pickup**. Approved drafts include one generic
   line asking the customer to select a pickup date and time. Never invent
   specific time slots.
@@ -173,6 +187,7 @@ reason belongs in the review record, not the customer's copy.
   selection. Deny and escalate drafts offer **no pickup**.
 
 ### 5.3 Structure per decision
+
 - **approve-refund:** decision → public reason → pickup line → "once we've
   received it" → 3–5 working days.
 - **approve-exchange (as requested):** decision → answer any worry stated in
@@ -191,6 +206,7 @@ reason belongs in the review record, not the customer's copy.
   callback within 1 working day → no reason, no threshold, no pickup.
 
 ### 5.4 Style rules (apply to every draft)
+
 - Open with the decision. Do not use "After analyzing the product
   condition…" or any stock opening.
 - **Invent nothing.** Use only details present in the input — if the input
@@ -207,6 +223,7 @@ example before it is kept. For each example record, outside the training
 fields: the **label**, the **reviewer**, and **kept or rejected**.
 
 Reject an example when any of these holds:
+
 - the label disagrees with the ladder in §4 (relabel it correctly instead,
   if the input is sound)
 - a decision-changing fact is missing from the input (§2)
@@ -252,7 +269,7 @@ Reject an example when any of these holds:
 
 ---
 
-*SOP version: v1 (approved 2026-10-29), written against policy v5. When a
+_SOP version: v1 (approved 2026-10-29), written against policy v5. When a
 labelling decision changes the policy, update this SOP and the policy
 reference together, and re-check any examples already labelled under the
-old rule.*
+old rule._

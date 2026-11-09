@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Baseline scoring harness for Part C [C.7]/[C.10].
+"""Baseline scoring harness for [C.7]/[C.10].
 
 Usage:
   score_baseline.py prepare
@@ -68,7 +68,7 @@ def score(path):
     misses = []
     worksheet = ["# Draft rubric worksheet",
                  "Score each draft 0-5 with the rubric in "
-                 "files/part-c-baseline-plan.md §4.\n"]
+                 "files/baseline-plan.md §4.\n"]
     for rid in sorted(gold):
         g = gold[rid]
         out = results.get(rid)

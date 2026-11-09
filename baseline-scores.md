@@ -1,4 +1,4 @@
-# Part C — Baseline scores [C.7]
+# Baseline scores [C.7]
 
 Status: base-Qwen baseline COMPLETE and reviewer-approved, 2026-10-30.
 Frontier baseline: COMPLETE 2026-11-06 — 15/16 decisions on
@@ -8,7 +8,7 @@ frontier drafts scored 74/80 (mean 4.63/5, 2 leaks). See the frontier section be
 under [C.10] with the identical method; all three meet in the final
 scorecard.
 
-Method: the plan in `part-c-baseline-plan.md` — the shared best prompt,
+Method: the plan in `baseline-plan.md` — the shared best prompt,
 the 16-example test set, temperature 0, one run per model, decisions by
 exact match on the `Decision:` line, drafts by the fixed 5-point rubric.
 Raw outputs preserved (project hidden_files: base_qwen_results.raw.jsonl;
