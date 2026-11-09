@@ -1,6 +1,6 @@
 # Returns Policy Assistant
 
-Antern Cohort 3 — Part C (the SLM project). A small language model,
+A small language model,
 fine-tuned with LoRA on Tinker, that applies one clothing shop's
 returns policy.
 
@@ -27,7 +27,7 @@ approve or deny costs the shop money or trust. The full argument is in
 | [C.8] LoRA config                          | Done — `lora_config.yaml`                                                  |
 | [C.9] Training on Tinker                   | Done — 3 epochs, validation loss 0.72 → 0.30 → 0.14 (`training_log.jsonl`) |
 | [C.10] Scorecard                           | Done — `scorecard.md`                                                      |
-| [C.11] This repo                           | In progress — diagrams in `diagrams.md`; final checks pending              |
+| [C.11] This repo                           | Done                                                                       |
 
 ## Files
 
