@@ -10,7 +10,7 @@ boundary cases:
   - Step 0 day-3 boundary (ex-048), shop-error guarantee beating the
     high-value escalate trigger (ex-037), faulty claim blocking Step 0
     (ex-084)
-The test file is set aside for scoring [C.7]/[C.10] and must not be used
+The test file is set aside for scoring and must not be used
 while building or tuning. Re-run after any review-pass changes.
 """
 import json

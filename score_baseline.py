@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Baseline scoring harness for [C.7]/[C.10].
+"""Baseline scoring harness.
 
 Usage:
   score_baseline.py prepare

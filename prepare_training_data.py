@@ -1,19 +1,19 @@
-"""Prepare SFT training data [C.9 prep] from the locked splits.
+"""Prepare SFT training data from the locked splits.
 
 Reads files/train.jsonl ONLY (never test.jsonl, never validation.jsonl
 for training). For each train example it emits one line:
   {"id", "system", "user", "assistant"}
 where:
   - "system" is the shared best prompt (hidden_files/baseline_prompt.txt,
-    identical to the [C.7] baseline prompt),
+    identical to the baseline prompt),
   - "user" is the example's input object as JSON, exactly as in the dataset,
   - "assistant" is "Decision: <label>\nDraft: <gold draft_reply>".
 
-Also writes a dry-run slice (the first 8 train lines) for the [C.8]
+Also writes a dry-run slice (the first 8 train lines) for the
 dry run: a few steps on a small slice to verify data loading, loss
 computation and checkpoint saving before the full run.
 
-Run from the goal folder:
+Run from the project folder:
   python3 hidden_files/prepare_training_data.py
 
 Outputs (hidden_files, not files/ — these are derived, not source data):
@@ -22,8 +22,8 @@ Outputs (hidden_files, not files/ — these are derived, not source data):
 
 No model, API key, or Tinker call is involved here; this is data prep
 only. The training script itself is still to be walked through
-step by step before [C.9], so this file can be diagrammed honestly
-for [C.11].
+step by step before training, so this file can be diagrammed
+honestly.
 """
 import json
 import pathlib
@@ -67,8 +67,8 @@ def main():
     print(f"wrote {len(out)} lines to train_sft.jsonl")
     print(f"wrote {DRY_RUN_SIZE} lines to train_sft_dryrun.jsonl")
 
-    # Validation in the same SFT shape — used ONLY to measure loss each
-    # epoch in [C.9]; never trained on, never part of the train outputs.
+    # Validation in the same SFT shape — used ONLY to measure loss at
+    # each epoch; never trained on, never part of the train outputs.
     vrows = [json.loads(line) for line in open(FILES / "validation.jsonl") if line.strip()]
     assert len(vrows) == 16, f"expected 16 validation examples, got {len(vrows)}"
     vout = []

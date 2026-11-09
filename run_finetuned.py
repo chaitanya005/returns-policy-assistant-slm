@@ -1,8 +1,8 @@
-"""Score the fine-tuned model [C.10]: sample the epoch-3 sampler
+"""Score the fine-tuned model: sample the epoch-3 sampler
 weights on the same 16 test prompts, with the same settings as the
 base-model baseline, and save the raw replies for scoring.
 
-The model is chosen by the [C.9] training log: validation loss fell
+The model is chosen by the training log: validation loss fell
 at every epoch (0.7235 -> 0.3025 -> 0.1354) and never turned up, so
 the epoch-3 weights are the final model — no fallback to epoch 2.
 
@@ -23,7 +23,7 @@ import json
 import tinker
 from tinker_cookbook import renderers
 
-# Epoch-3 sampler weights from the [C.9] run (see training_log.jsonl).
+# Epoch-3 sampler weights from the training run (see training_log.jsonl).
 MODEL_PATH = (
     "tinker://db1fcb0d-2128-5761-98ce-5b5946f3996e"
     ":train:0/sampler_weights/epoch-3-sampler"

@@ -1,4 +1,4 @@
-"""Run the frontier-model baseline [C.7] on Google's Gemini 3.5 Flash-Lite via
+"""Run the frontier-model baseline on Google's Gemini 3.5 Flash-Lite via
 the free Google AI Studio tier, using Gemini's OpenAI-compatible
 endpoint — so this is the OpenAI SDK with a different base URL, key,
 and model id. Same 16 test prompts, same scoring as both other models.
@@ -57,7 +57,7 @@ Notes:
   has finished thinking and writing.
 - Free-tier traffic may be used by Google to improve its models. The
   prompts contain only the synthetic shop policy and fictional orders —
-  no personal data, per the dataset rules in [C.4].
+  no personal data, per the dataset rules.
 """
 import json
 import os

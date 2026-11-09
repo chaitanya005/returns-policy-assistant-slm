@@ -1,4 +1,4 @@
-# LoRA configuration [C.8]
+# LoRA configuration
 # Returns Policy Assistant. Decided by Chaitanya on 2026-10-30, before
 # any training. If a value is changed after seeing results, that is a
 # new version of this file with the reason recorded — never a silent
@@ -6,7 +6,7 @@
 
 base_model: Qwen/Qwen3-8B
 # Base model size choice: the fine-tuned model must be the baseline
-# model trained, or the S2 comparison in the [C.7] plan (fine-tuned vs
+# model trained, or the S2 comparison in the baseline plan (fine-tuned vs
 # its own base) is meaningless. 8B fits the job: the baseline showed
 # the gap is behavioral, not capability — of the replies the base model
 # finished, 9/10 decisions were already correct; what failed was
@@ -53,7 +53,7 @@ learning_rate: 0.0001
 # (5e-5 to 2e-4). 2e-4 would learn faster but risks instability and
 # damaging general language quality; 5e-5 is gentler but may not land
 # the format discipline within 3 epochs. The per-epoch loss curves
-# are the evidence this choice was right, and they are logged [C.9].
+# are the evidence this choice was right, and they are logged in training_log.jsonl.
 # (Re-derived and confirmed by Chaitanya on 2026-11-02: with scale
 # fixed at 2, the felt strength is 1e-4 x 2 = 2e-4.)
 
@@ -92,7 +92,7 @@ cost_cap_usd: 1.00
 # (Re-derived and confirmed by Chaitanya on 2026-11-02.)
 
 dry_run: required-before-full-run
-# [C.8] A dry run comes first: a few training steps on a small slice
+# A dry run comes first: a few training steps on a small slice
 # of the train file to verify data loading, loss computation, and
 # checkpoint saving before the full run spends anything.
 # (Plan agreed by Chaitanya on 2026-11-02: the prepared 8-example

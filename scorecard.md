@@ -1,4 +1,4 @@
-# Scorecard [C.10] — Returns Policy Assistant
+# Scorecard — Returns Policy Assistant
 
 **Status: FINAL — all three models scored, all criteria verdicts settled.**
 

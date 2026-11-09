@@ -1,11 +1,11 @@
-# Baseline scores [C.7]
+# Baseline scores
 
 Status: base-Qwen baseline COMPLETE and reviewer-approved, 2026-10-30.
 Frontier baseline: COMPLETE 2026-11-06 — 15/16 decisions on
 gemini-3.5-flash-lite, after the original choice (gemini-3.8-flash)
 was abandoned for documented unavailability; frontier draft scores
 frontier drafts scored 74/80 (mean 4.63/5, 2 leaks). See the frontier section below. Fine-tuned model: scored
-under [C.10] with the identical method; all three meet in the final
+with the identical method; all three meet in the final
 scorecard.
 
 Method: the plan in `baseline-plan.md` — the shared best prompt,

@@ -1,4 +1,4 @@
-# Mermaid diagrams [C.11]
+# Mermaid diagrams
 
 Two diagrams for the repo README. Diagram 1 shows how one example moves
 through every file in the project. Diagram 2 shows the training script,

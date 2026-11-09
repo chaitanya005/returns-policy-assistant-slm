@@ -1,5 +1,5 @@
-"""Train the Returns Policy Assistant [C.9]: LoRA fine-tune Qwen3-8B
-on Tinker with the locked [C.8] config (files/lora_config.yaml).
+"""Train the Returns Policy Assistant: LoRA fine-tune Qwen3-8B
+on Tinker with the locked config (lora_config.yaml).
 
 Before running:
   pip install tinker tinker-cookbook
@@ -9,9 +9,9 @@ Before running:
     train_sft_dryrun.jsonl   (8-example slice, for --dry-run)
     validation_sft.jsonl     (16 validation examples, loss only)
 
-Run the dry run first [C.8]:
+Run the dry run first:
   python3 train.py --dry-run
-Then the full training [C.9]:
+Then the full training:
   python3 train.py
 
 What it does, in order:
@@ -23,8 +23,8 @@ What it does, in order:
      validation loss (forward only, no updates), then saves a
      checkpoint and sampler weights for that epoch.
   4. Writes training_log.jsonl — one line per epoch with the train
-     loss, validation loss and checkpoint paths (evidence for [C.9]
-     and the [C.10] scorecard).
+     loss, validation loss and checkpoint paths (evidence for the
+     training record and the scorecard).
 
 The dry run uses the 8-example slice for 3 steps (3 passes over the
 slice as one batch of 8), then saves and samples the saved model once,
@@ -41,7 +41,7 @@ from tinker_cookbook.supervised.common import (
     datum_from_model_input_weights,
 )
 
-# --- The locked [C.8] config (files/lora_config.yaml) ---
+# --- The locked config (lora_config.yaml) ---
 BASE_MODEL = "Qwen/Qwen3-8B"
 LORA_RANK = 16
 LEARNING_RATE = 1e-4
@@ -165,7 +165,7 @@ def main():
         saved = training_client.save_state("dry-run").result()
         print("checkpoint saved:", saved.path)
         sample_check(training_client, renderer, rows[0], "dry-run-sampler")
-        print("dry run complete — check the five items in the [C.8] plan")
+        print("dry run complete — check the five items in the plan")
         return
 
     train_rows = load_sft("train_sft.jsonl")

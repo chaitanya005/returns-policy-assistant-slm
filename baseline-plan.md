@@ -1,4 +1,4 @@
-# Baseline plan and success criteria [C.7]
+# Baseline plan and success criteria
 
 Status: APPROVED — criteria LOCKED by Chaitanya on 2026-10-30, before any
 model has been scored. The success criteria in §2 are not changed after
@@ -9,9 +9,9 @@ scores are seen.
 - The 16-example test set (`test.jsonl`), used for scoring only — never
   for training, prompt tuning, or example selection.
 - Two baselines, both given the identical best prompt (§3):
-  1. the base Qwen model (the same base chosen for fine-tuning in [C.8]),
+  1. the base Qwen model (the same base chosen for fine-tuning — see lora_config.yaml),
   2. one frontier model (Claude or GPT — recorded when run).
-- The fine-tuned model is scored later [C.10] with the same test set and
+- The fine-tuned model is scored later with the same test set and
   the same method, and judged against §2.
 - Decisions are scored by exact match against the dataset label.
   Drafts are scored with the fixed rubric in §4.
@@ -135,5 +135,5 @@ a leak failure for criterion S5, whatever its total.
 - Record for each model: total correct /16, correct per decision type,
   mean draft rubric score, number of leak failures.
 - Baseline results go in the scorecard file alongside the fine-tuned
-  results [C.10]; raw model outputs are saved with the run so any
+  results; raw model outputs are saved with the run so any
   score can be re-checked.

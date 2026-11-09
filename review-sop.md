@@ -1,11 +1,11 @@
 # Review SOP: Returns Policy Assistant
 
 **Status:** v1 — written by Cooper at Chaitanya's request on 2026-10-29 from
-the locked policy (v5) and the approved [C.3] text, and **approved by
+the locked policy (v5) and the approved behavior text, and **approved by
 Chaitanya on 2026-10-29**. This is the current SOP; any change goes through
 the version note at the end of this document.
 
-**Purpose (brief [C.5]):** this document tells a reviewer how to decide the
+**Purpose:** this document tells a reviewer how to decide the
 label for any returns example, and how to check its draft reply. Two
 reviewers following this SOP should give the same label to the same example.
 If a case is not covered here, do not improvise a label — flag it, and the
@@ -48,7 +48,7 @@ Before labelling, reject or fix the example if any of these fail:
 2. **Rare-material priced under £50.** `product_flag: rare-material`
    requires `order_value_gbp` >= 50. Violations are data errors — reject.
 3. **Personal data present.** No names, emails, phone numbers or addresses
-   anywhere in the example (brief [C.4]). Remove or reject.
+   anywhere in the example. Remove or reject.
 4. **The reason and the message disagree** (e.g. `reason: wrong size` but the
    message describes a fault). Fix the fields so they tell one story.
 
@@ -233,7 +233,7 @@ Reject an example when any of these holds:
 - the example duplicates an existing one, or contradicts an existing
   example's label for the same situation
 
-## 7. Before training — consistency checks (brief [C.6])
+## 7. Before training — consistency checks
 
 - **Contradiction check:** search for the same situation carrying two
   labels. Fix the data first, then update this SOP so the same problem does

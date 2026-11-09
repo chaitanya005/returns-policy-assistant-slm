@@ -1,4 +1,4 @@
-"""Run the base-model baseline [C.7]: sample the base Qwen model on the
+"""Run the base-model baseline: sample the base Qwen model on the
 16 test prompts and save the raw replies for scoring.
 
 Before running:
@@ -18,7 +18,7 @@ import json
 import tinker
 from tinker_cookbook import renderers
 
-BASE_MODEL = "Qwen/Qwen3-8B"  # must match the fine-tuning base in [C.8]
+BASE_MODEL = "Qwen/Qwen3-8B"  # must match the fine-tuning base in lora_config.yaml
 
 
 def extract_text(message):

@@ -17,25 +17,25 @@ approve or deny costs the shop money or trust. The full argument is in
 
 ## Status
 
-| Step                                       | State                                                                      |
-| ------------------------------------------ | -------------------------------------------------------------------------- |
-| [C.3] Behavior definition                  | Done — `behavior.md`                                                       |
-| Policy (v5)                                | Done — `policy-reference.md`                                               |
-| [C.5] Review SOP                           | Done — `review-sop.md`                                                     |
-| [C.4]/[C.6] Dataset: 100 reviewed examples | Done — `dataset.jsonl`, splits below                                       |
-| [C.7] Baselines                            | Done — base and frontier both scored (see Results)                         |
-| [C.8] LoRA config                          | Done — `lora_config.yaml`                                                  |
-| [C.9] Training on Tinker                   | Done — 3 epochs, validation loss 0.72 → 0.30 → 0.14 (`training_log.jsonl`) |
-| [C.10] Scorecard                           | Done — `scorecard.md`                                                      |
-| [C.11] This repo                           | Done                                                                       |
+| Step                           | State                                                                      |
+| ------------------------------ | -------------------------------------------------------------------------- |
+| Behavior definition            | Done — `behavior.md`                                                       |
+| Policy (v5)                    | Done — `policy-reference.md`                                               |
+| Review SOP                     | Done — `review-sop.md`                                                     |
+| Dataset: 100 reviewed examples | Done — `dataset.jsonl`, splits below                                       |
+| Baselines                      | Done — base and frontier both scored (see Results)                         |
+| LoRA config                    | Done — `lora_config.yaml`                                                  |
+| Training on Tinker             | Done — 3 epochs, validation loss 0.72 → 0.30 → 0.14 (`training_log.jsonl`) |
+| Scorecard                      | Done — `scorecard.md`                                                      |
+| This repo                      | Done — diagrams in `diagrams.md`                                           |
 
 ## Files
 
 - `policy-reference.md` — the shop's returns policy (v5), the decision
   ladder every label comes from.
-- `behavior.md` — [C.3]: the behavior, why a prompt is not enough,
+- `behavior.md` — the behavior, why a prompt is not enough,
   input/output definitions.
-- `review-sop.md` — [C.5]: the review SOP used to label the dataset.
+- `review-sop.md` — the review SOP used to label the dataset.
 - `dataset.jsonl` — the full 100-example dataset (25 per decision),
   each example reviewed and kept.
 - `train.jsonl` / `validation.jsonl` / `test.jsonl` — the split
@@ -43,7 +43,7 @@ approve or deny costs the shop money or trust. The full argument is in
 - `validate_dataset.py` — re-derives every label from the policy and
   checks the dataset (contradictions, balance, draft leaks).
 - `split_dataset.py` — the explicit, auditable split selection.
-- `baseline-plan.md` — [C.7]: success criteria (written before any
+- `baseline-plan.md` — success criteria (written before any
   scores), the shared best prompt, the draft rubric, the run protocol.
 - `baseline-scores.md` — baseline results so far.
 - `baseline_prompt.txt` / `test_prompts.jsonl` — the shared prompt and
@@ -61,20 +61,23 @@ approve or deny costs the shop money or trust. The full argument is in
   gemini-3.5-flash-lite, clean full-16 run, new results file.
 - `frontier_gemini_35flashlite_results.jsonl` — the frontier model's
   16 raw replies (the baseline of record).
-- `lora_config.yaml` — [C.8]: the LoRA config, every value justified.
+- `lora_config.yaml` — the LoRA config, every value justified.
 - `prepare_training_data.py` — builds the SFT files from the splits.
 - `train_sft.jsonl` / `train_sft_dryrun.jsonl` / `validation_sft.jsonl`
   — the training data (prompt + gold Decision/Draft per example).
-- `train.py` — [C.9]: the training script (`--dry-run` first).
-- `training_log.jsonl` — [C.9]: train and validation loss, one line
+- `train.py` — the training script (`--dry-run` first).
+- `training_log.jsonl` — train and validation loss, one line
   per epoch.
 - `run_finetuned.py` — samples the fine-tuned model (epoch-3 sampler
   weights) on the same 16 test prompts.
 - `finetuned_results.jsonl` — the fine-tuned model's 16 raw replies.
-- `scorecard.md` — [C.10]: the three-model scorecard — decision and
+- `demo.py` — a live demo: one return case through the base model
+  and the fine-tuned model, side by side, with the correct decision
+  shown at the end.
+- `scorecard.md` — the three-model scorecard — decision and
   draft scores, per-type detail, criteria verdicts, failure analysis,
   and what data to change next.
-- `diagrams.md` — [C.11]: two Mermaid diagrams — one example through
+- `diagrams.md` — two Mermaid diagrams — one example through
   every file, and the training script step by step.
 
 ## How to run
@@ -83,9 +86,9 @@ approve or deny costs the shop money or trust. The full argument is in
 pip install tinker tinker-cookbook
 export TINKER_API_KEY="..."   # never committed; see .env.example
 
-python3 run_baseline.py       # base-model baseline [C.7]
-python3 train.py --dry-run    # dry run: 8 examples, 3 steps [C.8]
-python3 train.py              # full training: 68 examples, 3 epochs [C.9]
+python3 run_baseline.py       # base-model baseline
+python3 train.py --dry-run    # dry run: 8 examples, 3 steps
+python3 train.py              # full training: 68 examples, 3 epochs
 ```
 
 ## Results

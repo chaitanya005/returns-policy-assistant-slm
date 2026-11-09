@@ -1,6 +1,6 @@
 # Returns Policy Assistant: locked v4 reference
 
-**Purpose:** a checkable reference for Chaitanya's own review SOP [C.5] and dataset work.
+**Purpose:** a checkable reference for the review SOP and dataset work.
 This is NOT the SOP itself, and NOT dataset examples. He writes those; this only
 consolidates decisions already locked in conversation (2026-10-23 to 2026-10-24)
 so the SOP session does not have to re-derive them from chat.
@@ -76,7 +76,7 @@ Past the window for its band, or any (applicable) condition fails.
   the flexible-band box waiver.
 - Format: one JSONL line per example with `input` / `decision` / `draft_reply`,
   plus a separate `review` metadata block (reviewer, kept) that is NOT training
-  input/output, per brief [C.5].
+  input/output.
 - Input fields: `item`; `order_value_gbp` and `days_since_delivery` as numbers;
   condition as six booleans (`used`, `has_stains`, `has_tears`, `was_washed`,
   `has_original_tag`, `has_original_box`); `customer_request`; `reason`;
@@ -85,7 +85,7 @@ Past the window for its band, or any (applicable) condition fails.
   triggers are visible.
 - Target: at least 100 reviewed examples, roughly balanced across the 4 decisions
   (~25 each), split train/validation/test with the test set untouched until scoring.
-- No personal data (names, emails, phone numbers) in examples, per brief [C.4].
+- No personal data (names, emails, phone numbers) in examples.
 
 ## 4. Draft-reply rules already settled (public vs internal)
 
@@ -110,21 +110,21 @@ Other settled draft mechanics:
   public terms, and the draft must still include the exchange next-step flow
   (pickup, then replacement), not just the refund refusal.
 
-## 5. SOP checklist — what brief [C.5] / [C.6] require the SOP to cover
+## 5. SOP checklist — what the SOP must cover
 
 Chaitanya writes the SOP; this is only the coverage checklist drawn from the brief:
 
-- [ ] One-sentence behaviour [C.3] + paragraph on why a prompt is not enough
+- [ ] One-sentence behaviour + paragraph on why a prompt is not enough
       (still to be written by Chaitanya — a separate pending item, not in this file).
 - [ ] Each label defined so two reviewers following the SOP give the same label
       to the same example.
 - [ ] The full ladder above, in order, including Step 0 and the shop-error rule.
 - [ ] For each example, record: label, reviewer, kept/rejected. Reject examples
       that do not teach the behaviour.
-- [ ] Contradiction check: same situation, different labels ([C.6]).
-- [ ] Label-balance check ([C.6]) — target ~25 per decision.
+- [ ] Contradiction check: same situation, different labels.
+- [ ] Label-balance check — target ~25 per decision.
 - [ ] Read a random sample of 20 examples; fix the data, then update the SOP so
-      the same problem does not come back ([C.6]).
+      the same problem does not come back.
 - [ ] The public-terms list (including rare-material exchange-only) vs the
       internal-rules list in §4, so reviewers can check drafts for leaks.
 
@@ -149,8 +149,8 @@ Do not assume answers to these; they need Chaitanya's call:
 - 2 Step 0 practice examples (premium colour/size within 3 days, and after 3 days).
 - One draft style/grammar pass over the 5 practice examples (neutral opening,
   Example 5 exchange next-step flow, Example 2 box reassurance, no invented details).
-- Chaitanya's [C.3] paragraph.
-- The review SOP [C.5] itself.
+- The behaviour paragraph (in behavior.md).
+- The review SOP itself.
 - Scaling from 5 practice examples to the full 100-example balanced dataset.
 
 ## 8. v5 amendments — the three §6 edge questions, decided 2026-10-29

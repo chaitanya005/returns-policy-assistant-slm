@@ -1,4 +1,4 @@
-# [C.3] Pick one behavior
+# Pick one behavior
 
 Status: written by Cooper at Chaitanya's request on 2026-10-29, from the policy
 locked 2026-10-23/24, and approved by Chaitanya the same evening
