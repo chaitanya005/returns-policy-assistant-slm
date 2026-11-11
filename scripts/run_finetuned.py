@@ -1,34 +1,42 @@
-"""Run the base-model baseline: sample the base Qwen model on the
-16 test prompts and save the raw replies for scoring.
+"""Score the fine-tuned model: sample the epoch-3 sampler
+weights on the same 16 test prompts, with the same settings as the
+base-model baseline, and save the raw replies for scoring.
+
+The model is chosen by the training log: validation loss fell
+at every epoch (0.7235 -> 0.3025 -> 0.1354) and never turned up, so
+the epoch-3 weights are the final model — no fallback to epoch 2.
 
 Before running:
   pip install tinker tinker-cookbook
   export TINKER_API_KEY="..."        # your key, in this terminal session
-  Put test_prompts.jsonl in the same folder as this script.
+  Reads the prompts from data/test_prompts.jsonl.
 
 Run:
-  python3 run_baseline.py
+  python3 scripts/run_finetuned.py
 
-Output: base_qwen_results.jsonl — one {"id", "output"} line per test
-example, in the format the scoring harness expects. Nothing in the
-model's replies is edited; scoring happens afterwards, separately.
+Output: results/finetuned_results.jsonl — one {"id", "output"} line per test
+example, the format the scoring harness expects. Scoring happens
+afterwards, separately, by the same method as the baselines.
 """
 import json
+from pathlib import Path
 
 import tinker
 from tinker_cookbook import renderers
 
-BASE_MODEL = "Qwen/Qwen3-8B"  # must match the fine-tuning base in lora_config.yaml
+DATA = Path(__file__).resolve().parent.parent / "data"
+RESULTS = Path(__file__).resolve().parent.parent / "results"
+
+# Epoch-3 sampler weights from the training run (see results/training_log.jsonl).
+MODEL_PATH = (
+    "tinker://db1fcb0d-2128-5761-98ce-5b5946f3996e"
+    ":train:0/sampler_weights/epoch-3-sampler"
+)
 
 
 def extract_text(message):
-    """Pull the reply text out of a parsed response message.
-
-    parse_response returns a message whose content is either a plain
-    string (thinking left inline, wrapped in <think>...</think>) or a
-    list of parts (a 'thinking' part and a 'text' part). Either way,
-    the scoreable reply is the final answer text only.
-    """
+    """Same helper as run_baseline.py: the scoreable reply text out
+    of a parsed response message."""
     content = message["content"] if isinstance(message, dict) else message
     if isinstance(content, list):
         return "\n".join(
@@ -44,14 +52,12 @@ def extract_text(message):
 
 def main():
     service_client = tinker.ServiceClient()
-    sampling_client = service_client.create_sampling_client(base_model=BASE_MODEL)
+    sampling_client = service_client.create_sampling_client(model_path=MODEL_PATH)
     tokenizer = sampling_client.get_tokenizer()
-    # The renderer wraps chat messages in Qwen3's chat format (special
-    # tokens, turn markers) and knows the model's stop sequences.
     renderer = renderers.get_renderer("qwen3", tokenizer)
 
-    prompts = [json.loads(line) for line in open("test_prompts.jsonl")]
-    with open("base_qwen_results.jsonl", "w") as out:
+    prompts = [json.loads(line) for line in open(DATA / "test_prompts.jsonl")]
+    with open(RESULTS / "finetuned_results.jsonl", "w") as out:
         for p in prompts:
             messages = [
                 {"role": "system", "content": p["system"]},
@@ -70,7 +76,7 @@ def main():
             text = extract_text(message)
             out.write(json.dumps({"id": p["id"], "output": text}) + "\n")
             print(p["id"], "done")
-    print("wrote base_qwen_results.jsonl")
+    print("wrote results/finetuned_results.jsonl")
 
 
 if __name__ == "__main__":

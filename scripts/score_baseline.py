@@ -3,14 +3,14 @@
 
 Usage:
   score_baseline.py prepare
-      Write hidden_files/test_prompts.jsonl: one line per test example
-      with the shared system prompt (hidden_files/baseline_prompt.txt)
+      Write data/test_prompts.jsonl: one line per test example
+      with the shared system prompt (data/baseline_prompt.txt)
       and the user message (the example input as JSON).
 
   score_baseline.py score RESULTS.jsonl
       RESULTS.jsonl lines: {"id": "ex-001", "output": "<raw model reply>"}
       Parses the "Decision:" line, exact-matches against the gold label
-      in files/test.jsonl, prints total + per-label accuracy and every
+      in data/test.jsonl, prints total + per-label accuracy and every
       mismatch, and writes a draft-rubric worksheet next to the results
       file (<name>.rubric.md) for the human rubric scoring.
 """
@@ -21,9 +21,10 @@ from collections import defaultdict
 from pathlib import Path
 
 BASE = Path(__file__).resolve().parent
-TEST = BASE / "test.jsonl"
-PROMPT = Path(__file__).resolve().parent / "baseline_prompt.txt"
-PROMPTS_OUT = Path(__file__).resolve().parent / "test_prompts.jsonl"
+DATA = BASE.parent / "data"
+TEST = DATA / "test.jsonl"
+PROMPT = DATA / "baseline_prompt.txt"
+PROMPTS_OUT = DATA / "test_prompts.jsonl"
 LABELS = ["approve-refund", "approve-exchange",
           "deny-out-of-policy", "escalate-to-human"]
 
@@ -68,7 +69,7 @@ def score(path):
     misses = []
     worksheet = ["# Draft rubric worksheet",
                  "Score each draft 0-5 with the rubric in "
-                 "files/baseline-plan.md §4.\n"]
+                 "docs/baseline-plan.md §4.\n"]
     for rid in sorted(gold):
         g = gold[rid]
         out = results.get(rid)

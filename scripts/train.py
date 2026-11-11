@@ -4,15 +4,16 @@ on Tinker with the locked config (lora_config.yaml).
 Before running:
   pip install tinker tinker-cookbook
   export TINKER_API_KEY="..."        # your key, in this terminal session
-  Put these files in the same folder as this script:
+  The SFT files live in the data/ folder (built by
+  scripts/prepare_training_data.py):
     train_sft.jsonl          (68 training examples)
     train_sft_dryrun.jsonl   (8-example slice, for --dry-run)
     validation_sft.jsonl     (16 validation examples, loss only)
 
 Run the dry run first:
-  python3 train.py --dry-run
+  python3 scripts/train.py --dry-run
 Then the full training:
-  python3 train.py
+  python3 scripts/train.py
 
 What it does, in order:
   1. Loads the SFT files and turns each example into a training Datum
@@ -22,8 +23,8 @@ What it does, in order:
      forward_backward + one optim_step per batch), then measures the
      validation loss (forward only, no updates), then saves a
      checkpoint and sampler weights for that epoch.
-  4. Writes training_log.jsonl — one line per epoch with the train
-     loss, validation loss and checkpoint paths (evidence for the
+  4. Writes results/training_log.jsonl — one line per epoch with the
+     train loss, validation loss and checkpoint paths (evidence for the
      training record and the scorecard).
 
 The dry run uses the 8-example slice for 3 steps (3 passes over the
@@ -33,6 +34,7 @@ so all five dry-run checks can be seen in one short run.
 import argparse
 import json
 import random
+from pathlib import Path
 
 import tinker
 from tinker_cookbook import renderers
@@ -40,6 +42,9 @@ from tinker_cookbook.supervised.common import (
     compute_mean_nll,
     datum_from_model_input_weights,
 )
+
+DATA = Path(__file__).resolve().parent.parent / "data"
+RESULTS = Path(__file__).resolve().parent.parent / "results"
 
 # --- The locked config (lora_config.yaml) ---
 BASE_MODEL = "Qwen/Qwen3-8B"
@@ -54,7 +59,7 @@ DRY_RUN_STEPS = 3  # passes over the 8-example slice (batch 8 = 1 step each)
 
 
 def load_sft(path):
-    return [json.loads(line) for line in open(path) if line.strip()]
+    return [json.loads(line) for line in open(DATA / path) if line.strip()]
 
 
 def to_datums(rows, renderer):
@@ -178,7 +183,7 @@ def main():
     print(f"train tokens per epoch: {n_tokens}; estimated cost ${estimate:.3f}")
     assert estimate < COST_CAP_USD, "estimate exceeds the $1.00 cap — stop"
 
-    with open("training_log.jsonl", "w") as log:
+    with open(RESULTS / "training_log.jsonl", "w") as log:
         for epoch in range(1, EPOCHS + 1):
             shuffled = train_datums[:]
             random.Random(1234 + epoch).shuffle(shuffled)
@@ -207,7 +212,7 @@ def main():
                 f"epoch {epoch} done: train loss {train_loss:.4f}, "
                 f"val loss {val_loss:.4f}"
             )
-    print("training complete — see training_log.jsonl")
+    print("training complete — see results/training_log.jsonl")
 
 
 if __name__ == "__main__":

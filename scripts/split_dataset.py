@@ -18,7 +18,8 @@ from collections import Counter
 from pathlib import Path
 
 BASE = Path(__file__).resolve().parent
-SRC = BASE / "dataset.jsonl"
+DATA = BASE.parent / "data"
+SRC = DATA / "dataset.jsonl"
 
 TEST = {
     # approve-refund
@@ -59,7 +60,7 @@ def main():
             splits["train"].append(r)
 
     for name, part in splits.items():
-        out = BASE / f"{name}.jsonl"
+        out = DATA / f"{name}.jsonl"
         out.write_text("".join(json.dumps(r) + "\n" for r in part))
         counts = dict(Counter(r["decision"] for r in part))
         print(f"{name}: {len(part)} examples, labels {counts}")

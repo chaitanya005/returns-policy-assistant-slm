@@ -12,9 +12,10 @@ Checks:
 Exit code 1 if any error.
 """
 import json, sys, collections
+from pathlib import Path
 
-PATH = sys.argv[1] if len(sys.argv) > 1 else \
-    "dataset.jsonl"
+PATH = sys.argv[1] if len(sys.argv) > 1 else str(
+    Path(__file__).resolve().parent.parent / "data" / "dataset.jsonl")
 
 LABELS = {"approve-refund", "approve-exchange", "deny-out-of-policy", "escalate-to-human"}
 INPUT_FIELDS = {"item", "order_value_gbp", "days_since_delivery", "used", "has_stains",

@@ -8,7 +8,7 @@ Before running:
   no billing setup for the free tier).
   pip install openai
   export GEMINI_API_KEY="..."        # your key, in this terminal session
-  Put test_prompts.jsonl in the same folder as this script.
+  Reads the prompts from data/test_prompts.jsonl.
 
 Run:
   python3 run_frontier_gemini_35flashlite.py
@@ -64,6 +64,11 @@ import os
 import time
 
 from openai import OpenAI
+from pathlib import Path
+
+DATA = Path(__file__).resolve().parent.parent / "data"
+RESULTS = Path(__file__).resolve().parent.parent / "results"
+RESULTS_FILE = RESULTS / "frontier_gemini_35flashlite_results.jsonl"
 
 MODEL = "gemini-3.5-flash-lite"  # lighter flagship-class model; free tier allows 500 requests/day (vs 20/day for gemini-3.8-flash)
 
@@ -75,10 +80,10 @@ def main():
         timeout=600,
         max_retries=0,
     )
-    prompts = [json.loads(line) for line in open("test_prompts.jsonl")]
+    prompts = [json.loads(line) for line in open(DATA / "test_prompts.jsonl")]
     done_ids = set()
-    if os.path.exists("frontier_gemini_35flashlite_results.jsonl"):
-        for line in open("frontier_gemini_35flashlite_results.jsonl"):
+    if os.path.exists(RESULTS_FILE):
+        for line in open(RESULTS_FILE):
             done_ids.add(json.loads(line)["id"])
     if done_ids:
         print("resuming — already saved:", ", ".join(sorted(done_ids)),
@@ -87,7 +92,7 @@ def main():
     consecutive_failures = 0
     stopped_early = False
     saved = len(done_ids)
-    with open("frontier_gemini_35flashlite_results.jsonl", "a") as out:
+    with open(RESULTS_FILE, "a") as out:
         for i, p in enumerate(prompts):
             if p["id"] in done_ids:
                 continue
@@ -156,7 +161,7 @@ def main():
         print("finished with gaps — skipped:", ", ".join(skipped),
               "— rerun this script to fill them in", flush=True)
     else:
-        print("all answers saved in frontier_gemini_35flashlite_results.jsonl",
+        print("all answers saved in results/frontier_gemini_35flashlite_results.jsonl",
               flush=True)
 
 

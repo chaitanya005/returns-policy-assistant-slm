@@ -13,7 +13,7 @@ for the demo.
 Before running:
   pip install tinker tinker-cookbook
   export TINKER_API_KEY="..."        # your key, in this terminal session
-  Put test.jsonl and test_prompts.jsonl in the same folder.
+  The test files live in the data/ folder — nothing to move.
 
 Run:
   python3 demo.py            # menu: Enter = the 3 showcase cases,
@@ -39,13 +39,16 @@ Presenter notes:
 import json
 import sys
 import time
+from pathlib import Path
+
+DATA = Path(__file__).resolve().parent / "data"
 
 import tinker
 from tinker_cookbook import renderers
 
 BASE_MODEL = "Qwen/Qwen3-8B"
 
-# Epoch-3 sampler weights from the training run (see training_log.jsonl).
+# Epoch-3 sampler weights from the training run (see results/training_log.jsonl).
 MODEL_PATH = (
     "tinker://db1fcb0d-2128-5761-98ce-5b5946f3996e"
     ":train:0/sampler_weights/epoch-3-sampler"
@@ -198,11 +201,11 @@ def main():
     auto = "--auto" in sys.argv
 
     gold = {}
-    for line in open("test.jsonl"):
+    for line in open(DATA / "test.jsonl"):
         d = json.loads(line)
         gold[d["id"]] = d
     prompts = {}
-    for line in open("test_prompts.jsonl"):
+    for line in open(DATA / "test_prompts.jsonl"):
         d = json.loads(line)
         prompts[d["id"]] = d
 

@@ -1,10 +1,10 @@
 """Prepare SFT training data from the locked splits.
 
-Reads files/train.jsonl ONLY (never test.jsonl, never validation.jsonl
+Reads data/train.jsonl ONLY (never test.jsonl, never validation.jsonl
 for training). For each train example it emits one line:
   {"id", "system", "user", "assistant"}
 where:
-  - "system" is the shared best prompt (hidden_files/baseline_prompt.txt,
+  - "system" is the shared best prompt (data/baseline_prompt.txt,
     identical to the baseline prompt),
   - "user" is the example's input object as JSON, exactly as in the dataset,
   - "assistant" is "Decision: <label>\nDraft: <gold draft_reply>".
@@ -14,11 +14,11 @@ dry run: a few steps on a small slice to verify data loading, loss
 computation and checkpoint saving before the full run.
 
 Run from the project folder:
-  python3 hidden_files/prepare_training_data.py
+  python3 scripts/prepare_training_data.py
 
-Outputs (hidden_files, not files/ — these are derived, not source data):
-  hidden_files/train_sft.jsonl
-  hidden_files/train_sft_dryrun.jsonl
+Outputs (into data/ — these are derived, not source data):
+  data/train_sft.jsonl
+  data/train_sft_dryrun.jsonl
 
 No model, API key, or Tinker call is involved here; this is data prep
 only. The training script itself is still to be walked through
@@ -29,8 +29,8 @@ import json
 import pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parent
-FILES = ROOT
-HIDDEN = ROOT
+FILES = ROOT.parent / "data"
+HIDDEN = FILES
 VALID_DECISIONS = {
     "approve-refund",
     "approve-exchange",
