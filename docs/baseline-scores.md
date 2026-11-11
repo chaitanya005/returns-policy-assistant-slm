@@ -11,8 +11,8 @@ scorecard.
 Method: the plan in `baseline-plan.md` — the shared best prompt,
 the 16-example test set, temperature 0, one run per model, decisions by
 exact match on the `Decision:` line, drafts by the fixed 5-point rubric.
-Raw outputs preserved (project hidden_files: base_qwen_results.raw.jsonl;
-normalized answer text: base_qwen_results.jsonl).
+Raw outputs preserved outside this repo (base_qwen_results.raw.jsonl);
+normalized answer text: results/base_qwen_results.jsonl.
 
 ## Base model: Qwen/Qwen3-8B (prompt only, no training)
 
